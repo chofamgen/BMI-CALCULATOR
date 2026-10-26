@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Body Mass Index Calculator | Check Your BMI</title>
+    <meta name="description"
+        content="Free body mass index calculator. Enter your height and weight in metric or imperial units to see your BMI and ideal weight range." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- HERO: intro panel + calculator card -->
+    <header class="hero-section">
+        <div class="hero-section__intro">
+            <div class="hero-section__intro-content page-container">
+
+                <div class="image-box hero-section__logo-box">
+                    <img src="./images/LOGO.jpeg" alt="BMI calculator logo" />
+                </div>
+                <h1 class="hero-section__title">Body Mass Index Calculator</h1>
+                <p class="hero-section__description">
+                    Find out how your weight compares to your height with our BMI calculator. BMI is only one measure of
+                    health, but it is a useful place to start when thinking about your overall well-being.
+                </p>
+            </div>
+        </div>
+
+        <div class="hero-section__card-wrapper page-container">
+            <form class="bmi-card" id="bmi-form">
+                <h2 class="bmi-card__title">Your measurements</h2>
+
+                <!-- Unit system switch. -->
+                <div class="unit-switch">
+                    <label class="unit-switch__option">
+                        <input class="unit-switch__radio unit-switch__radio--metric" type="radio" name="unit-system"
+                            value="metric" id="unit-metric-radio" checked />
+                        Metric
+                    </label>
+                    <label class="unit-switch__option">
+                        <input class="unit-switch__radio unit-switch__radio--imperial" type="radio" name="unit-system"
+                            value="imperial" id="unit-imperial-radio" />
+                        Imperial
+                    </label>
+                </div>
+
+                <!-- METRIC fields  -->
+                <div class="measurement-fields measurement-fields--metric" id="metric-fields">
+                    <div class="measurement-group">
+                        <span class="measurement-group__label">Height</span>
+                        <div class="measurement-group__inputs">
+                            <div class="measurement-input-box">
+                                <input class="measurement-input-box__input" type="number" id="height-cm-input"
+                                    placeholder="0" min="0" step="any" inputmode="decimal" />
+                                <span class="measurement-input-box__unit">cm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="measurement-group">
+                        <span class="measurement-group__label">Weight</span>
+                        <div class="measurement-group__inputs">
+                            <div class="measurement-input-box">
+                                <input class="measurement-input-box__input" type="number" id="weight-kg-input"
+                                    placeholder="0" min="0" step="any" inputmode="decimal" />
+                                <span class="measurement-input-box__unit">kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMPERIAL fields -->
+                <div class="measurement-fields measurement-fields--imperial" id="imperial-fields">
+                    <div class="measurement-group">
+                        <span class="measurement-group__label">Height</span>
+                        <div class="measurement-group__inputs">
+                            <div class="measurement-input-box">
+                                <input class="measurement-input-box__input" type="number" id="height-feet-input"
+                                    placeholder="0" min="0" step="any" inputmode="decimal" />
+                                <span class="measurement-input-box__unit">ft</span>
+                            </div>
+                            <div class="measurement-input-box">
+                                <input class="measurement-input-box__input" type="number" id="height-inches-input"
+                                    placeholder="0" min="0" step="any" inputmode="decimal" />
+                                <span class="measurement-input-box__unit">in</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="measurement-group">
+                        <span class="measurement-group__label">Weight</span>
+                        <div class="measurement-group__inputs">
+                            <div class="measurement-input-box">
+                                <input class="measurement-input-box__input" type="number" id="weight-stones-input"
+                                    placeholder="0" min="0" step="any" inputmode="decimal" />
+                                <span class="measurement-input-box__unit">st</span>
+                            </div>
+                            <div class="measurement-input-box">
+                                <input class="measurement-input-box__input" type="number" id="weight-pounds-input"
+                                    placeholder="0" min="0" step="any" inputmode="decimal" />
+                                <span class="measurement-input-box__unit">lbs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="check-bmi-button">
+                    Check BMI
+                </button>
+
+                <!-- RESULT PANEL: shows EITHER the welcome block OR the result block (toggle `hidden` in JS) -->
+                <div class="bmi-result-panel">
+                    <div class="bmi-welcome" id="bmi-welcome-message">
+                        <h3 class="bmi-welcome__title">Welcome!</h3>
+                        <p class="bmi-welcome__text">Fill in your height and weight and your BMI will appear here.</p>
+                    </div>
+
+                    <!-- Starts hidden. Sample values below only show the design; JS overwrites them. -->
+                    <div class="bmi-result-output" id="bmi-result-output" hidden>
+                        <div class="bmi-result-output__headline">
+                            <p class="bmi-result-output__label">Your BMI is...</p>
+                            <p class="bmi-result-output__value" id="bmi-value">23.4</p>
+                        </div>
+                        <p class="bmi-result-output__summary">
+                            Your BMI suggests you&rsquo;re <span id="bmi-classification-text">a healthy weight</span>.
+                            Your ideal
+                            weight is between <strong id="ideal-weight-range">63.3kgs - 85.2kgs</strong>.
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <!-- WHAT YOUR RESULT MEANS -->
+        <section class="result-meaning-section page-container page-section two-column-section">
+            <div class="image-box two-column-section__image-box">
+                <img src="./images/man-eating-healthy.jpg" alt="Smiling man eating with chopsticks" />
+            </div>
+
+            <div class="two-column-section__text">
+                <h2 class="section-title">Understanding your result</h2>
+                <p class="section-text">
+                    A BMI between 18.5 and 24.9 falls in the healthy weight range. Staying there can lower your risk of
+                    problems such as obesity and type 2 diabetes. Build meals around fruit and vegetables with less
+                    sugar and
+                    fat, and aim for about 30 minutes of movement on five days each week.
+                </p>
+            </div>
+        </section>
+
+        <!-- HEALTHY HABITS -->
+        <section class="page-container page-section">
+            <div class="habits-panel">
+                <div class="habit-list">
+                    <article class="habit-card">
+                        <div class="icon-circle habit-card__icon-circle habit-card__icon-circle--eating">
+                            <span class="material-icons-outlined habit-card__icon">restaurant</span>
+                        </div>
+                        <div class="habit-card__text">
+                            <h3 class="habit-card__title">Healthy eating</h3>
+                            <p class="habit-card__description">
+                                Good food choices help you manage weight, ward off illness, support digestion and
+                                immunity, and keep
+                                your mind sharp and your mood steady.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="habit-card">
+                        <div class="icon-circle habit-card__icon-circle habit-card__icon-circle--exercise">
+                            <span class="material-icons-outlined habit-card__icon">directions_run</span>
+                        </div>
+                        <div class="habit-card__text">
+                            <h3 class="habit-card__title">Regular exercise</h3>
+                            <p class="habit-card__description">
+                                Staying active builds fitness, helps manage weight, lifts your mood and lowers disease
+                                risk for a
+                                longer, healthier life.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="habit-card">
+                        <div class="icon-circle habit-card__icon-circle habit-card__icon-circle--sleep">
+                            <span class="material-icons-outlined habit-card__icon">bedtime</span>
+                        </div>
+                        <div class="habit-card__text">
+                            <h3 class="habit-card__title">Adequate sleep</h3>
+                            <p class="habit-card__description">
+                                Rest sharpens your thinking, steadies your emotions and gives your body time to recover
+                                and recharge.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIMITATIONS OF BMI -->
+        <section class="page-container page-section">
+            
+            <div class="limitations-grid">
+                <div class="limitations-grid__intro">
+                    <h2 class="section-title">When BMI falls short</h2>
+                    <p class="section-text">
+                        BMI is a handy quick check, but it does not fit everyone. Some groups should read their result
+                        with
+                        care, and sometimes another measure tells a better story.
+                    </p>
+                </div>
+
+                <article class="limitation-card limitation-card--gender">
+                    <div class="limitation-card__header">
+                        <span class="material-icons-outlined limitation-card__icon">wc</span>
+                        <h3 class="limitation-card__title">Gender</h3>
+                    </div>
+                    <p class="limitation-card__description">
+                        Boys and girls grow and store body fat differently as they age, so a child&rsquo;s age and
+                        gender must be
+                        considered when reading their BMI.
+                    </p>
+                </article>
+
+                <article class="limitation-card limitation-card--age">
+                    <div class="limitation-card__header">
+                        <span class="material-icons-outlined limitation-card__icon">cake</span>
+                        <h3 class="limitation-card__title">Age</h3>
+                    </div>
+                    <p class="limitation-card__description">
+                        Older adults tend to gain body fat and lose muscle, which can make BMI underestimate how much
+                        body fat
+                        they carry.
+                    </p>
+                </article>
+
+                <article class="limitation-card limitation-card--muscle">
+                    <div class="limitation-card__header">
+                        <span class="material-icons-outlined limitation-card__icon">fitness_center</span>
+                        <h3 class="limitation-card__title">Muscle</h3>
+                    </div>
+                    <p class="limitation-card__description">
+                        BMI cannot tell muscle from fat, so very muscular people may be labelled overweight or obese.
+                    </p>
+                </article>
+
+                <article class="limitation-card limitation-card--pregnancy">
+                    <div class="limitation-card__header">
+                        <span class="material-icons-outlined limitation-card__icon">pregnant_woman</span>
+                        <h3 class="limitation-card__title">Pregnancy</h3>
+                    </div>
+                    <p class="limitation-card__description">
+                        Weight rises during pregnancy to support the baby. A healthy BMI before pregnancy helps reduce
+                        health
+                        risks for mother and child.
+                    </p>
+                </article>
+
+                <article class="limitation-card limitation-card--race">
+                    <div class="limitation-card__header">
+                        <span class="material-icons-outlined limitation-card__icon">groups</span>
+                        <h3 class="limitation-card__title">Race</h3>
+                    </div>
+                    <p class="limitation-card__description">
+                        Some Black and Asian groups can face health risks at a lower BMI. Speak to your GP or practice
+                        nurse to
+                        learn more.
+                    </p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="page-footer page-container">
+        <p class="page-footer__text">
+            &copy; 2024 Body Mass Index Calculator. All rights reserved.
+        </p>
+    </footer>
+
+    <script src="./main.js"></script>
+</body>
+
+</html>
