@@ -98,3 +98,5 @@ bmi_form.addEventListener("submit", function (event) {
   event.preventDefault();
   calculate_bmi();
 });
+
+
